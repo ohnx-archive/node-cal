@@ -14,5 +14,8 @@ var event = require('./event.js');
 var cal = require('./calendar.js');
 
 exports.CalEvent = event.CalEvent;
+exports.RepeatingCalEvent = event.RepeatingCalEvent;
 exports.Calendar = cal.Calendar;
 exports.calFromJSON = cal.calFromJSON;
+exports.repeatWeekly = event.repeatWeekly;
+exports.eventFromJSON = event.eventFromJSON;

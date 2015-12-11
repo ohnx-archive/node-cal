@@ -30,10 +30,35 @@ Calendar.prototype.addEvent = function(event) {
     }
 };
 
+Calendar.prototype.addRecurringEvent = function(event) {
+    if (util.isValidRecurringEvent(event)) {
+        var timeDiff = Math.abs(event.event.endDate.getTime() - event.event.startDate.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        var startDate = event.event.startDate;
+        var currDate = new Date(event.event.startDate);
+        for(var i = 0; i <= diffDays; i++) {
+            if(event.testFunc(startDate, currDate)) {
+                var tempEvent = new calEvent.CalEvent
+                (
+                    event.event.summary,
+                    new Date(currDate),
+                    new Date(currDate.getTime() + event.eventLength),
+                    event.event.description,
+                    event.event.location
+                );
+                this.events.push(tempEvent);
+            }
+            currDate.setDate(currDate.getDate() + 1);
+        }
+    } else {
+        throw "Invalid recurring event!";
+    }
+};
+
 Calendar.prototype.toICal = function(url) {
     var serialized, len, event;
     len = this.events.length;
-    serialized = "BEGIN:VCALENDAR\n" +
+    serialized ="BEGIN:VCALENDAR\n" +
                 "VERSION:2.0\n"+
                 "CALSCALE:GREGORIAN\n" +
                 "METHOD:PUBLISH\n";

@@ -31,6 +31,16 @@ function isValidEvent(event) {
     }
 }
 
+function isValidRecurringEvent(event) {
+    try {
+        if(!isValidEvent(event.event)) return false;
+        if(event.testFunc == null) return false;
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 function dateToStr(date) {
     //ics has date formatting like ISO, just without all the dashes and colons
     //ie, 19970715T040000Z
@@ -72,5 +82,6 @@ function makeUnsafe(str) {
 exports.guid = guid;
 exports.dateToStr = dateToStr;
 exports.isValidEvent = isValidEvent;
+exports.isValidRecurringEvent = isValidRecurringEvent;
 exports.makeSafe = makeSafe;
 exports.makeUnsafe = makeUnsafe;

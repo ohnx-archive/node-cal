@@ -22,6 +22,21 @@ function CalEvent(name, startDate, endDate, description, location, uid) {
     this.description = description;
 }
 
+function RepeatingCalEvent(event, eventLength, testFunc) {
+    if(!util.isValidEvent(event)) return null;
+    if(eventLength == null) eventLength = 0;
+    if(testFunc == null) return null;
+    this.event = event;
+    this.eventLength = eventLength;
+    this.testFunc = testFunc;
+}
+
+var repeatWeekly = function(startDate, date) {
+    var timeDiff = Math.abs(date.getTime() - startDate.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays % 7 == 0;
+};
+
 CalEvent.prototype.toJSON = function() {
     var json;
     json = "{";
@@ -35,4 +50,25 @@ CalEvent.prototype.toJSON = function() {
     return json;
 };
 
+var eventFromJSON = function(json) {
+    if(json == null) return null;
+    try {
+        var keys = JSON.parse(json);
+        return new CalEvent
+        (
+            keys["summary"],
+            new Date(keys["startDate"]),
+            new Date(keys["endDate"]),
+            keys["description"],
+            keys["location"],
+            keys["uid"]
+        );
+    } catch (e) {
+        return null;
+    }
+};
+
 exports.CalEvent = CalEvent;
+exports.RepeatingCalEvent = RepeatingCalEvent;
+exports.repeatWeekly = repeatWeekly;
+exports.eventFromJSON = eventFromJSON;
