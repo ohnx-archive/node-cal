@@ -48,15 +48,22 @@ function dateToStr(date) {
 
 function makeSafe(str) {
     return str
-    .replace(/\n/g, "\n")
-    .replace(/\'/g, "\'")
-    .replace(/\"/g, '\"')
-    .replace(/\&/g, "\&")
-    .replace(/\r/g, "\r")
-    .replace(/\t/g, "\t");
+    .replace(/\n/g, "\\n")
+    .replace(/\"/g, '\\"')
+    .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t");
+}
+
+function makeUnsafe(str) {
+    return str
+    .replace(/\\n/g, "\n")
+    .replace(/\\\"/g, '"')
+    .replace(/\\r/g, "\r")
+    .replace(/\\t/g, "\t");
 }
 
 exports.guid = guid;
 exports.dateToStr = dateToStr;
 exports.isValidEvent = isValidEvent;
 exports.makeSafe = makeSafe;
+exports.makeUnsafe = makeUnsafe;

@@ -26,7 +26,7 @@ Calendar.prototype.addEvent = function(event) {
     if (util.isValidEvent(event)) {
         this.events.push(event);
     } else {
-        console.log("invalid event");
+        throw "Invalid event!";
     }
 };
 
@@ -47,12 +47,12 @@ Calendar.prototype.toICal = function(url) {
         event = this.events[i];
         serialized += "BEGIN:VEVENT\n";
         serialized += "UID:" + event.uid + "\n";
-        serialized += "SUMMARY:" + event.summary + "\n";
-        serialized += "DESCRIPTION:" + event.description + "\n";
+        serialized += "SUMMARY:" + util.makeSafe(event.summary) + "\n";
+        serialized += "DESCRIPTION:" + util.makeSafe(event.description) + "\n";
         serialized += "CLASS:PUBLIC\n";
         serialized += "DTSTART:" + util.dateToStr(event.startDate) + "\n";
         serialized += "DTEND:" + util.dateToStr(event.endDate) + "\n";
-        serialized += "LOCATION:" + event.location + "\n";
+        serialized += "LOCATION:" + util.makeSafe(event.location) + "\n";
         serialized += "END:VEVENT\n";
     }
     serialized += "END:VCALENDAR";
@@ -77,7 +77,28 @@ Calendar.prototype.toJSON = function () {
 
 var calFromJSON = function(json) {
     if(json == null) return null;
-    return JSON.parse(json);
+    try {
+        var keys = JSON.parse(json);
+        var newCal = new Calendar(keys["name"], keys["desc"]);
+        var eA = keys["events"];
+        var lenEA = eA.length;
+        newCal.prodid = keys["prodid"];
+        for(var i=0; i< lenEA; i++) {
+            newCal.addEvent(
+                new calEvent.CalEvent(
+                    eA[i]["summary"],
+                    new Date(eA[i]["startDate"]),
+                    new Date(eA[i]["endDate"]),
+                    eA[i]["description"],
+                    eA[i]["location"],
+                    eA[i]["uid"]
+                )
+            );
+        }
+        return newCal;
+    } catch (e) {
+        return null;
+    }
 };
 
 exports.Calendar = Calendar;
