@@ -1,6 +1,7 @@
 # node-cal
 
 [![Build Status](https://travis-ci.org/ohnx/node-cal.svg)](https://travis-ci.org/ohnx/node-cal)
+![Coverage](https://img.shields.io/badge/coverage-as_much_as_possible-brightgreen.svg)
 
 node-cal is a nodejs calendar module.
 

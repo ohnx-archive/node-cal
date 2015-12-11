@@ -12,9 +12,9 @@
 var node_cal = require('../index.js');
 
 var mainCal = new node_cal.Calendar("coolcal", "everything");
-var event = new node_cal.CalEvent("\'something\'", new Date(), new Date(), "\"quote test\"\nsomething cool", "1 Magic Way\nCity\nCountry");
+var event = new node_cal.CalEvent("\'something\'", new Date(), new Date(), "\"quote test\"\nsomething, cool", "1 Magic Way\nCity\nCountry");
 mainCal.addEvent(event);
-event = new node_cal.CalEvent("\'something 2\'", new Date(), new Date(), "\"quote test\"\nsomething cool", "1 Magic Way\nCity\nCountry");
+event = new node_cal.CalEvent("\'something 2\'", new Date(), new Date(), "\"quote test\"\nsomething; co:ol!!!", "1 Magic Way\nCity\nCountry");
 mainCal.addEvent(event);
 
 var testICal = mainCal.toICal();

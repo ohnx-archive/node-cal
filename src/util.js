@@ -46,7 +46,12 @@ function dateToStr(date) {
     return icsDate;
 }
 
-function makeSafe(str) {
+function makeSafe(str, isICS) {
+    if (isICS) {
+        str = str
+        .replace(/,/g, '\\,')
+        .replace(/;/g, '\\;');
+    }
     return str
     .replace(/\n/g, "\\n")
     .replace(/\"/g, '\\"')
@@ -59,6 +64,8 @@ function makeUnsafe(str) {
     .replace(/\\n/g, "\n")
     .replace(/\\\"/g, '"')
     .replace(/\\r/g, "\r")
+    .replace(/\\,/g, ',')
+    .replace(/\\;/g, ';')
     .replace(/\\t/g, "\t");
 }
 

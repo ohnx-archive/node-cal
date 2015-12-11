@@ -47,12 +47,12 @@ Calendar.prototype.toICal = function(url) {
         event = this.events[i];
         serialized += "BEGIN:VEVENT\n";
         serialized += "UID:" + event.uid + "\n";
-        serialized += "SUMMARY:" + util.makeSafe(event.summary) + "\n";
-        serialized += "DESCRIPTION:" + util.makeSafe(event.description) + "\n";
+        serialized += "SUMMARY:" + util.makeSafe(event.summary, true) + "\n";
+        serialized += "DESCRIPTION:" + util.makeSafe(event.description, true) + "\n";
         serialized += "CLASS:PUBLIC\n";
         serialized += "DTSTART:" + util.dateToStr(event.startDate) + "\n";
         serialized += "DTEND:" + util.dateToStr(event.endDate) + "\n";
-        serialized += "LOCATION:" + util.makeSafe(event.location) + "\n";
+        serialized += "LOCATION:" + util.makeSafe(event.location, true) + "\n";
         serialized += "END:VEVENT\n";
     }
     serialized += "END:VCALENDAR";
