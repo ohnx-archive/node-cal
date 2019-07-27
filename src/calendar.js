@@ -43,6 +43,7 @@ Calendar.prototype.addRecurringEvent = function(event) {
                     event.event.summary,
                     new Date(currDate),
                     new Date(currDate.getTime() + event.eventLength),
+                    event.event.alarms,
                     event.event.description,
                     event.event.location
                 );
@@ -73,11 +74,18 @@ Calendar.prototype.toICal = function(url) {
         serialized += "BEGIN:VEVENT\n";
         serialized += "UID:" + event.uid + "\n";
         serialized += "SUMMARY:" + util.makeSafe(event.summary, true) + "\n";
-        serialized += "DESCRIPTION:" + util.makeSafe(event.description, true) + "\n";
+        if (event.description) serialized += "DESCRIPTION:" + util.makeSafe(event.description, true) + "\n";
         serialized += "CLASS:PUBLIC\n";
         serialized += "DTSTART:" + util.dateToStr(event.startDate) + "\n";
         serialized += "DTEND:" + util.dateToStr(event.endDate) + "\n";
-        serialized += "LOCATION:" + util.makeSafe(event.location, true) + "\n";
+        if (event.location) serialized += "LOCATION:" + util.makeSafe(event.location, true) + "\n";
+        for (var j = 0; j < event.alarms.length; j++) {
+            serialized += "BEGIN:VALARM\n";
+            serialized += "TRIGGER:-" + util.secondsToDuration(event.alarms[j]) + "\n";
+            serialized += "ACTION:DISPLAY\n";
+            serialized += "DESCRIPTION:Reminder\n";
+            serialized += "END:VALARM\n";
+        }
         serialized += "END:VEVENT\n";
     }
     serialized += "END:VCALENDAR";
@@ -114,6 +122,7 @@ var calFromJSON = function(json) {
                     eA[i]["summary"],
                     new Date(eA[i]["startDate"]),
                     new Date(eA[i]["endDate"]),
+                    eA[i]["alarms"],
                     eA[i]["description"],
                     eA[i]["location"],
                     eA[i]["uid"]

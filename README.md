@@ -9,8 +9,4 @@ it allows someone to create new events, add them to a calendar, and then export 
 
 it is also possible to convert a calendar or a calendar event to a JSON format, and then read that same JSON format back into a calendar format.
 
-## planned items
-
- - iCal parser
-
 want a feature added? feel free to create [an issue](https://github.com/ohnx/node-cal/issues).

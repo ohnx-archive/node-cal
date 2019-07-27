@@ -13,9 +13,10 @@ var util = require('./util.js');
 var exports = module.exports = {};
 
 // CalEvent object
-function CalEvent(name, startDate, endDate, description, location, uid) {
+function CalEvent(name, startDate, endDate, alarms, description, location, uid) {
     if (startDate instanceof Date) { this.startDate = startDate; } else { return null; }
     if (endDate instanceof Date) { this.endDate = endDate; } else { return null; }
+    this.alarms = alarms;
     this.uid = uid == null ? (util.guid() + '@node-cal-event.js') : uid;
     this.summary = name;
     this.location = location;
@@ -45,7 +46,8 @@ CalEvent.prototype.toJSON = function() {
     json += "\"location\" : \"" + util.makeSafe(this.location == null ? "" : this.location) + "\",\n";
     json += "\"description\" : \"" + util.makeSafe(this.description == null ? "" : this.description) + "\",\n";
     json += "\"startDate\" : \"" + this.startDate.toISOString() + "\",\n";
-    json += "\"endDate\" : \"" + this.endDate.toISOString() + "\"\n";
+    json += "\"endDate\" : \"" + this.endDate.toISOString() + "\",\n";
+    json += "\"alarms\" : " + JSON.stringify(this.alarms) + "\n";
     json += "}";
     return json;
 };
@@ -59,6 +61,7 @@ var eventFromJSON = function(json) {
             keys["summary"],
             new Date(keys["startDate"]),
             new Date(keys["endDate"]),
+            keys["alarms"],
             keys["description"],
             keys["location"],
             keys["uid"]

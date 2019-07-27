@@ -79,9 +79,48 @@ function makeUnsafe(str) {
     .replace(/\\t/g, "\t");
 }
 
+function secondsToDuration(seconds) {
+    var str = "P";
+    var days = Math.floor(seconds/86400);
+
+    if (seconds == 0) {
+        return str + "T0S";
+    }
+
+    if (days > 0) {
+        str += days;
+        str += "D";
+        seconds -= days*86400;
+    }
+
+    str += "T";
+
+    var hours = Math.floor(seconds/3600);
+    if (hours > 0) {
+        str += hours;
+        str += "H";
+        seconds -= hours*3600;
+    }
+
+    var minutes = Math.floor(seconds/60);
+    if (minutes > 0) {
+        str += minutes;
+        str += "M";
+        seconds -= minutes*60;
+    }
+
+    if (seconds > 0) {
+        str += seconds;
+        str += "S";
+    }
+
+    return str;
+}
+
 exports.guid = guid;
 exports.dateToStr = dateToStr;
 exports.isValidEvent = isValidEvent;
 exports.isValidRecurringEvent = isValidRecurringEvent;
 exports.makeSafe = makeSafe;
 exports.makeUnsafe = makeUnsafe;
+exports.secondsToDuration = secondsToDuration;
